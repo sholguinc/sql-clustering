@@ -1,0 +1,11 @@
+{
+  "name": "sql-clustering",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "start": "docker compose up",
+    "seed": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < seed.sql",
+    "reset": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < reset.sql",
+    "transform": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < transform.sql"
+  }
+}

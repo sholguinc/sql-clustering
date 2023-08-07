@@ -7,7 +7,7 @@ CREATE TEMPORARY TABLE tmp_vegetation (
 );
 
 -- Import data from the CSV into the temporary table
-COPY tmp_vegetation ("LON", "LAT", "veg_height", "alt_cat") FROM PROGRAM 'cut -d "," -f 3,4,2,6 /docker-entrypoint-initdb.d/seed.csv' WITH (FORMAT CSV, HEADER);
+COPY tmp_vegetation ("LON", "LAT", "veg_height", "alt_cat") FROM PROGRAM 'cut -d "," -f 3,4,2,6 /seed.csv' WITH (FORMAT CSV, HEADER);
 
 -- Add a new column "h"
 ALTER TABLE tmp_vegetation ADD COLUMN "height_diff" FLOAT;
