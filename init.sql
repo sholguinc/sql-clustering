@@ -8,7 +8,7 @@ CREATE TABLE "Vegetation" (
     lt FLOAT CHECK (lt >= -90.0 AND lt <= 90.0) NOT NULL,
     h FLOAT NOT NULL,
     z INTEGER NOT NULL DEFAULT 20,
-    d INTEGER NOT NULL DEFAULT 1
+    d INTEGER NOT NULL
 );
 
 -- Create index
