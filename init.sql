@@ -1,6 +1,3 @@
--- Create the database
-CREATE DATABASE sql_clustering;
-
 -- Connect to the database
 \c sql_clustering;
 
@@ -14,4 +11,8 @@ CREATE TABLE "Vegetation" (
     d INTEGER NOT NULL DEFAULT 1
 );
 
+-- Create index
 CREATE INDEX idx_vegetation_d_z ON "Vegetation" (d, z);
+
+-- Postgis
+CREATE EXTENSION IF NOT EXISTS postgis;

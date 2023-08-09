@@ -4,8 +4,10 @@
   "version": "1.0.0",
   "scripts": {
     "start": "docker compose up",
+    "initialize": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < init.sql",
     "seed": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < seed.sql",
-    "reset": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < reset.sql",
-    "transform": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < transform.sql"
+    "drop": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < drop.sql",
+    "transform": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < transform.sql",
+    "reset": "yarn drop && yarn initialize && yarn seed"
   }
 }
