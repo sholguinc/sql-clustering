@@ -70,11 +70,11 @@ BEGIN
 
     -- Loop over distinct "d" values
     FOR d_value IN (SELECT DISTINCT d FROM "Vegetation" ORDER BY d) LOOP
+        RAISE NOTICE 'Processing data for d = %...', d_value;
+
         -- Just vegetation delta table
         CREATE TABLE JustVegetationDelta AS
         SELECT * FROM JustVegetation WHERE d = d_value;
-
-        RAISE NOTICE 'Processing data for d = %...', d_value;
 
         -- Perform clustering for certain zoom value
         PERFORM clustering_for_delta(d_value);

@@ -31,7 +31,7 @@ $$ LANGUAGE plpgsql;
 -- Seed data
 DO $$
 DECLARE
-    csv_files TEXT[] := ARRAY['seed_total_1.csv', 'seed_total_2.csv'];
+    csv_files TEXT[] := ARRAY['seed_1.csv', 'seed_2.csv'];
     csv_name TEXT;
     csv_path TEXT;
     index INT;
