@@ -3,7 +3,12 @@ DELETE FROM "Vegetation" WHERE z <> 20;
 
 
 -- Clustering function
-CREATE OR REPLACE FUNCTION perform_clustering(d_value INTEGER, zoom_value INTEGER) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION perform_clustering(d_value INTEGER, zoom_level INTEGER) RETURNS VOID AS $$
+DECLARE
+    radius DECIMAL(18, 2) = 70;
+    extent DECIMAL(18, 2) = 512;
+    distance DECIMAL(18, 15);
+    epsilon DECIMAL(18, 15);
 BEGIN
     -- Create temporal initial data table
     CREATE TEMPORARY TABLE tmp_input_data AS
@@ -11,17 +16,21 @@ BEGIN
         id,
         ST_SetSRID(ST_MakePoint(lg, lt), 4326) AS geom,
         h
-    FROM JustVegetation;
+    FROM JustVegetationDelta;
 
     -- Clusters
     CREATE TEMPORARY TABLE tmp_clusters (LIKE "Vegetation" INCLUDING ALL);
+
+    -- zoom and epsilon relationship
+    distance := radius / (extent * POWER(2, zoom_level));
+    epsilon := 150 * distance;
 
     -- Get clusters data
     WITH tmp_output_data AS (
         SELECT
             id,
             geom,
-            ST_ClusterDBSCAN(geom, eps := 1 / zoom_value, minpoints := 2) OVER () AS cluster_id,
+            ST_ClusterDBSCAN(geom, eps := epsilon, minpoints := 1) OVER () AS cluster_id,
             h
         FROM tmp_input_data
     )
@@ -32,7 +41,7 @@ BEGIN
         AVG(ST_X(ST_Centroid(geom))) AS lg,
         AVG(ST_Y(ST_Centroid(geom))) AS lt,
         MIN(h) AS h,
-        zoom_value AS z,
+        zoom_level AS z,
         d_value AS d
     FROM tmp_output_data GROUP BY cluster_id ORDER BY cluster_id;
 
@@ -69,7 +78,7 @@ BEGIN
     SELECT * FROM "Vegetation" WHERE z = 20;
 
     -- Loop over distinct "d" values
-    FOR d_value IN (SELECT DISTINCT d FROM "Vegetation" ORDER BY d) LOOP
+    FOR d_value IN (SELECT DISTINCT d FROM JustVegetation ORDER BY d) LOOP
         RAISE NOTICE 'Processing data for d = %...', d_value;
 
         -- Just vegetation delta table

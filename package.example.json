@@ -7,7 +7,7 @@
     "initialize": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < init.sql",
     "seed": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < seed.sql",
     "drop": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < drop.sql",
-    "cluster": "docker exec -i evgm-db psql -U user -d evgm-db < clustering.sql",
+    "cluster": "docker exec -i sql-clustering psql -U dev_user -d sql_clustering < clustering.sql",
     "reset": "yarn drop && yarn initialize && yarn seed"
   }
 }
